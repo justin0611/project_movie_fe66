@@ -6,8 +6,11 @@ import { StopOutlined } from '@ant-design/icons'
 import { ThongTinDatVe } from "../../_core/models/ThongTinDatVe";
 import './Checkout.css'
 import { DAT_VE } from '../../redux/actions/Type/QuanLyDatVeType';
+import { Tabs } from 'antd';
+import { layThongTinNguoiDungAction } from '../../redux/actions/QuanLyNguoiDungAction';
 
-export default function Checkout(props) {
+const { TabPane } = Tabs;
+function Checkout(props) {
     const user = JSON.parse(localStorage.getItem(USER_LOGIN))
 
     const { chiTietPhongVe, danhSachGheDangDat } = useSelector(state => state.QuanLyDatVeReducer);
@@ -50,11 +53,6 @@ export default function Checkout(props) {
 
     return (
         <div className='container-fluid'>
-            <div style={{ display: 'flex' }}>
-                <h3 className='mx-5'>01 CHỌN GHẾ & THANH TOÁN</h3>
-                <h3 className='mx-5'>02 KET QUA DAT VE</h3>
-                <p className='mx-5'>{user.hoTen}</p>
-            </div>
             <div className="row px-2">
                 <div className="col-9">
                     <div className="d-flex justify-content-between">
@@ -126,4 +124,53 @@ export default function Checkout(props) {
 
         </div>
     )
+}
+
+
+function callback(key) {
+    console.log(key);
+}
+
+export default function (props) {
+
+    return <div className="">    <Tabs defaultActiveKey="1" onChange={callback}>
+        <TabPane tab="01 CHON GHE & THANH TOAN" key="1">
+            <Checkout {...props} />
+        </TabPane>
+        <TabPane tab="KET QUA DAT VE" key="2">
+            <KetQuaDatVe {...props} />
+        </TabPane>
+    </Tabs></div>
+
+}
+function KetQuaDatVe(props) {
+
+    const { thongTinNguoiDung } = useSelector(state => state.QuanLyNguoiDungReducer);
+    const user = JSON.parse(localStorage.getItem(USER_LOGIN));
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+
+        dispatch(layThongTinNguoiDungAction());
+    }, [])
+    console.log('sfsafasf', thongTinNguoiDung);
+    return (
+
+        <div className="container">
+            <h1 className='text-center'>lich su dat ve</h1>
+            <div className="row">
+                <div className="col-4">
+                    <div className="card" style={{ width: '18rem' }}>
+                        <img className="card-img-top" src="..." alt="Card image cap" />
+                        <div className="card-body">
+                            <h5 className="card-title">Card title</h5>
+                            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="#" className="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+
 }
